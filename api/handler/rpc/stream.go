@@ -139,7 +139,7 @@ func serveWebsocket(ctx context.Context, w http.ResponseWriter, r *http.Request,
 	}
 
 	writeLock := new(sync.Mutex)
-	go writeLoop(compression, rw, stream, writeLock)
+	go writeLoop(rw, stream, writeLock)
 
 	rsp := stream.Response()
 
@@ -201,7 +201,7 @@ func serveWebsocket(ctx context.Context, w http.ResponseWriter, r *http.Request,
 }
 
 // writeLoop
-func writeLoop(compression bool, rw io.ReadWriter, stream client.Stream, writeLock *sync.Mutex) {
+func writeLoop(rw io.ReadWriter, stream client.Stream, writeLock *sync.Mutex) {
 	// close stream when done
 	defer stream.Close()
 
@@ -229,7 +229,7 @@ func writeLoop(compression bool, rw io.ReadWriter, stream client.Stream, writeLo
 			}
 
 			frame = ws.UnmaskFrameInPlace(frame)
-			ok, err := wsflate.IsCompressed(frame.Header)
+			compressedMessage, err := wsflate.IsCompressed(frame.Header)
 			if err != nil {
 				if logger.V(logger.ErrorLevel, logger.DefaultLogger) {
 					logger.Error(err)
@@ -239,7 +239,7 @@ func writeLoop(compression bool, rw io.ReadWriter, stream client.Stream, writeLo
 			// Note that even after successful negotiation of
 			// compression extension, both sides are able to send
 			// non-compressed messages.
-			if ok {
+			if compressedMessage {
 				frame, err = wsflate.DecompressFrame(frame)
 				if err != nil {
 					if logger.V(logger.ErrorLevel, logger.DefaultLogger) {
@@ -255,7 +255,7 @@ func writeLoop(compression bool, rw io.ReadWriter, stream client.Stream, writeLo
 				continue
 			case ws.OpPing:
 				f := ws.NewPongFrame(frame.Payload)
-				if compression {
+				if compressedMessage {
 					if f, err = wsflate.CompressFrame(f); err != nil {
 						if logger.V(logger.ErrorLevel, logger.DefaultLogger) {
 							logger.Error(fmt.Errorf("ws compress poing failed: %w", err))
