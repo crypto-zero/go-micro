@@ -4,9 +4,9 @@ import (
 	"encoding/base64"
 	"time"
 
-	"github.com/dgrijalva/jwt-go"
 	"github.com/crypto-zero/go-micro/v2/auth"
 	"github.com/crypto-zero/go-micro/v2/auth/token"
+	"github.com/golang-jwt/jwt/v4"
 )
 
 // authClaims to be encoded in the JWT

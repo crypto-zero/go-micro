@@ -9,7 +9,6 @@ require (
 	github.com/caddyserver/certmagic v0.14.1
 	github.com/crypto-zero/cli/v2 v2.2.3
 	github.com/davecgh/go-spew v1.1.1
-	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/ef-ds/deque v1.0.4
 	github.com/evanphx/json-patch/v5 v5.5.0
 	github.com/forestgiant/sliceutil v0.0.0-20160425183142-94783f95db6c
@@ -21,6 +20,7 @@ require (
 	github.com/go-telegram-bot-api/telegram-bot-api/v5 v5.0.0-rc1
 	github.com/gobwas/httphead v0.1.0
 	github.com/gobwas/ws v1.1.0
+	github.com/golang-jwt/jwt/v4 v4.0.0
 	github.com/golang/protobuf v1.5.2
 	github.com/google/uuid v1.3.0
 	github.com/gorilla/handlers v1.5.1
