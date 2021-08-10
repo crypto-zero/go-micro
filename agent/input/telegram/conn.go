@@ -6,9 +6,9 @@ import (
 	"sync"
 
 	"github.com/forestgiant/sliceutil"
-	"github.com/micro/go-micro/v2/agent/input"
-	"github.com/micro/go-micro/v2/logger"
-	tgbotapi "gopkg.in/telegram-bot-api.v4"
+	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+	"github.com/crypto-zero/go-micro/v2/agent/input"
+	"github.com/crypto-zero/go-micro/v2/logger"
 )
 
 type telegramConn struct {
@@ -36,11 +36,7 @@ func newConn(input *telegramInput) (*telegramConn, error) {
 func (tc *telegramConn) run() {
 	u := tgbotapi.NewUpdate(0)
 	u.Timeout = 60
-	updates, err := tc.input.api.GetUpdatesChan(u)
-	if err != nil {
-		return
-	}
-
+	updates := tc.input.api.GetUpdatesChan(u)
 	tc.recv = updates
 	tc.syncCond.Signal()
 

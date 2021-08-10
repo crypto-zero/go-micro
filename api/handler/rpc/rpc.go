@@ -10,21 +10,22 @@ import (
 	"strings"
 
 	jsonpatch "github.com/evanphx/json-patch/v5"
-	"github.com/micro/go-micro/v2/api"
-	"github.com/micro/go-micro/v2/api/handler"
-	"github.com/micro/go-micro/v2/api/internal/proto"
-	"github.com/micro/go-micro/v2/client"
-	"github.com/micro/go-micro/v2/client/selector"
-	"github.com/micro/go-micro/v2/codec"
-	"github.com/micro/go-micro/v2/codec/jsonrpc"
-	"github.com/micro/go-micro/v2/codec/protorpc"
-	"github.com/micro/go-micro/v2/errors"
-	"github.com/micro/go-micro/v2/logger"
-	"github.com/micro/go-micro/v2/metadata"
-	"github.com/micro/go-micro/v2/registry"
-	"github.com/micro/go-micro/v2/util/ctx"
-	"github.com/micro/go-micro/v2/util/qson"
 	"github.com/oxtoacart/bpool"
+
+	"github.com/crypto-zero/go-micro/v2/api"
+	"github.com/crypto-zero/go-micro/v2/api/handler"
+	"github.com/crypto-zero/go-micro/v2/api/internal/proto"
+	"github.com/crypto-zero/go-micro/v2/client"
+	"github.com/crypto-zero/go-micro/v2/client/selector"
+	"github.com/crypto-zero/go-micro/v2/codec"
+	"github.com/crypto-zero/go-micro/v2/codec/jsonrpc"
+	"github.com/crypto-zero/go-micro/v2/codec/protorpc"
+	"github.com/crypto-zero/go-micro/v2/errors"
+	"github.com/crypto-zero/go-micro/v2/logger"
+	"github.com/crypto-zero/go-micro/v2/metadata"
+	"github.com/crypto-zero/go-micro/v2/registry"
+	"github.com/crypto-zero/go-micro/v2/util/ctx"
+	"github.com/crypto-zero/go-micro/v2/util/qson"
 )
 
 const (
@@ -400,7 +401,10 @@ func requestPayload(r *http.Request) ([]byte, error) {
 		var jsonbody map[string]interface{}
 		if json.Valid(bodybuf) {
 			if err = json.Unmarshal(bodybuf, &jsonbody); err != nil {
-				return nil, err
+				// the standard number can't be unmarshal into an map
+				// but it is a valid json data
+				// return nil, err
+				jsonbody = nil
 			}
 		}
 		dstmap := make(map[string]interface{})

@@ -1,11 +1,11 @@
 package grpc
 
 import (
-	"github.com/micro/go-micro/v2/client"
-	gclient "github.com/micro/go-micro/v2/client/grpc"
-	"github.com/micro/go-micro/v2/server"
-	gserver "github.com/micro/go-micro/v2/server/grpc"
-	"github.com/micro/go-micro/v2/service"
+	"github.com/crypto-zero/go-micro/v2/client"
+	gclient "github.com/crypto-zero/go-micro/v2/client/grpc"
+	"github.com/crypto-zero/go-micro/v2/server"
+	gserver "github.com/crypto-zero/go-micro/v2/server/grpc"
+	"github.com/crypto-zero/go-micro/v2/service"
 )
 
 type grpcService struct {

@@ -1,9 +1,9 @@
 package memory
 
 import (
-	"github.com/micro/go-micro/v2/config/loader"
-	"github.com/micro/go-micro/v2/config/reader"
-	"github.com/micro/go-micro/v2/config/source"
+	"github.com/crypto-zero/go-micro/v2/config/loader"
+	"github.com/crypto-zero/go-micro/v2/config/reader"
+	"github.com/crypto-zero/go-micro/v2/config/source"
 )
 
 // WithSource appends a source to list of sources

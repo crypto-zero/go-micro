@@ -5,11 +5,11 @@ import (
 	"os"
 	"testing"
 
-	"github.com/micro/cli/v2"
-	"github.com/micro/go-micro/v2"
-	"github.com/micro/go-micro/v2/config"
-	"github.com/micro/go-micro/v2/config/cmd"
-	"github.com/micro/go-micro/v2/config/source"
+	"github.com/crypto-zero/cli/v2"
+	"github.com/crypto-zero/go-micro/v2"
+	"github.com/crypto-zero/go-micro/v2/config"
+	"github.com/crypto-zero/go-micro/v2/config/cmd"
+	"github.com/crypto-zero/go-micro/v2/config/source"
 )
 
 func TestCliSourceDefault(t *testing.T) {

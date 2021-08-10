@@ -1,4 +1,4 @@
-name: Build all github.com/micro/examples
+name: Build all github.com/crypto-zero/examples
 on:
   push: 
     branches:

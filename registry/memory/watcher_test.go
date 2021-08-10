@@ -3,7 +3,7 @@ package memory
 import (
 	"testing"
 
-	"github.com/micro/go-micro/v2/registry"
+	"github.com/crypto-zero/go-micro/v2/registry"
 )
 
 func TestWatcher(t *testing.T) {

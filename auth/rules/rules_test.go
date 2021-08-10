@@ -3,7 +3,7 @@ package rules
 import (
 	"testing"
 
-	"github.com/micro/go-micro/v2/auth"
+	"github.com/crypto-zero/go-micro/v2/auth"
 )
 
 func TestVerify(t *testing.T) {

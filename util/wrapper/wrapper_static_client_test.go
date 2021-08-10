@@ -4,13 +4,13 @@ import (
 	"context"
 	"testing"
 
-	"github.com/micro/go-micro/v2/broker"
-	bmemory "github.com/micro/go-micro/v2/broker/memory"
-	"github.com/micro/go-micro/v2/client"
-	rmemory "github.com/micro/go-micro/v2/registry/memory"
-	"github.com/micro/go-micro/v2/server"
-	tmemory "github.com/micro/go-micro/v2/transport/memory"
-	wrapper "github.com/micro/go-micro/v2/util/wrapper"
+	"github.com/crypto-zero/go-micro/v2/broker"
+	bmemory "github.com/crypto-zero/go-micro/v2/broker/memory"
+	"github.com/crypto-zero/go-micro/v2/client"
+	rmemory "github.com/crypto-zero/go-micro/v2/registry/memory"
+	"github.com/crypto-zero/go-micro/v2/server"
+	tmemory "github.com/crypto-zero/go-micro/v2/transport/memory"
+	wrapper "github.com/crypto-zero/go-micro/v2/util/wrapper"
 )
 
 type TestFoo struct {

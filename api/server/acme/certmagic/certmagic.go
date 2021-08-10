@@ -8,8 +8,8 @@ import (
 	"time"
 
 	"github.com/caddyserver/certmagic"
-	"github.com/micro/go-micro/v2/api/server/acme"
-	"github.com/micro/go-micro/v2/logger"
+	"github.com/crypto-zero/go-micro/v2/api/server/acme"
+	"github.com/crypto-zero/go-micro/v2/logger"
 )
 
 type certmagicProvider struct {
@@ -21,7 +21,6 @@ func (c *certmagicProvider) setup() {
 	certmagic.DefaultACME.CA = c.opts.CA
 	if c.opts.ChallengeProvider != nil {
 		// Enabling DNS Challenge disables the other challenges
-		certmagic.DefaultACME.DNSProvider = c.opts.ChallengeProvider
 	}
 	if c.opts.OnDemand {
 		certmagic.Default.OnDemand = new(certmagic.OnDemandConfig)

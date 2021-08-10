@@ -5,7 +5,7 @@ import (
 	"flag"
 	"strings"
 
-	"github.com/micro/cli/v2"
+	"github.com/crypto-zero/cli/v2"
 )
 
 func copyFlag(name string, ff *flag.Flag, set *flag.FlagSet) {

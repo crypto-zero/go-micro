@@ -5,9 +5,9 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/micro/cli/v2"
-	"github.com/micro/go-micro/v2/agent/input"
-	tgbotapi "gopkg.in/telegram-bot-api.v4"
+	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+	"github.com/crypto-zero/cli/v2"
+	"github.com/crypto-zero/go-micro/v2/agent/input"
 )
 
 type telegramInput struct {

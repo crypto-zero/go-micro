@@ -1,4 +1,4 @@
-// Package kubernetes taken from https://github.com/micro/go-micro/blob/master/debug/log/kubernetes/kubernetes.go
+// Package kubernetes taken from https://github.com/crypto-zero/go-micro/blob/master/debug/log/kubernetes/kubernetes.go
 // There are some modifications compared to the other files as
 // this package doesn't provide write functionality.
 // With the write functionality gone, structured logs also go away.
@@ -9,9 +9,9 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/micro/go-micro/v2/runtime"
-	"github.com/micro/go-micro/v2/util/kubernetes/client"
-	"github.com/micro/go-micro/v2/util/log"
+	"github.com/crypto-zero/go-micro/v2/runtime"
+	"github.com/crypto-zero/go-micro/v2/util/kubernetes/client"
+	"github.com/crypto-zero/go-micro/v2/util/log"
 )
 
 type klog struct {

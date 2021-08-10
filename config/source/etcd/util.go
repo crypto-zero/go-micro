@@ -3,9 +3,9 @@ package etcd
 import (
 	"strings"
 
-	"github.com/coreos/etcd/clientv3"
-	"github.com/coreos/etcd/mvcc/mvccpb"
-	"github.com/micro/go-micro/v2/config/encoder"
+	"go.etcd.io/etcd/api/v3/mvccpb"
+	"go.etcd.io/etcd/client/v3"
+	"github.com/crypto-zero/go-micro/v2/config/encoder"
 )
 
 func makeEvMap(e encoder.Encoder, data map[string]interface{}, kv []*clientv3.Event, stripPrefix string) map[string]interface{} {

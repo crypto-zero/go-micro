@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/micro/go-micro/v2/debug/log"
+	"github.com/crypto-zero/go-micro/v2/debug/log"
 	"github.com/stretchr/testify/assert"
 )
 

@@ -5,9 +5,9 @@ import (
 	"context"
 	"time"
 
-	"github.com/micro/go-micro/v2/client"
-	"github.com/micro/go-micro/v2/debug/log"
-	pb "github.com/micro/go-micro/v2/debug/service/proto"
+	"github.com/crypto-zero/go-micro/v2/client"
+	"github.com/crypto-zero/go-micro/v2/debug/log"
+	pb "github.com/crypto-zero/go-micro/v2/debug/service/proto"
 )
 
 // Debug provides debug service client

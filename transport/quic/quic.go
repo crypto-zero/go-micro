@@ -8,8 +8,8 @@ import (
 	"time"
 
 	quic "github.com/lucas-clemente/quic-go"
-	"github.com/micro/go-micro/v2/transport"
-	utls "github.com/micro/go-micro/v2/util/tls"
+	"github.com/crypto-zero/go-micro/v2/transport"
+	utls "github.com/crypto-zero/go-micro/v2/util/tls"
 )
 
 type quicSocket struct {
@@ -51,7 +51,7 @@ func (q *quicSocket) Send(m *transport.Message) error {
 }
 
 func (q *quicSocket) Close() error {
-	return q.s.Close()
+	return q.s.CloseWithError(0, "")
 }
 
 func (q *quicSocket) Local() string {
@@ -118,8 +118,7 @@ func (q *quicTransport) Dial(addr string, opts ...transport.DialOption) (transpo
 		}
 	}
 	s, err := quic.DialAddr(addr, config, &quic.Config{
-		IdleTimeout: time.Minute * 2,
-		KeepAlive:   true,
+		KeepAlive: true,
 	})
 	if err != nil {
 		return nil, err
