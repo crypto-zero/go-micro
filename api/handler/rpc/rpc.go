@@ -137,7 +137,7 @@ func (h *rpcHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if isStream(r, service) {
 		// drop older context as it can have timeouts and create new
 		//		md, _ := metadata.FromContext(cx)
-		//serveWebsocket(context.TODO(), w, r, service, c)
+		// serveWebsocket(context.TODO(), w, r, service, c)
 		serveWebsocket(cx, w, r, service, c)
 		return
 	}
@@ -264,7 +264,7 @@ func requestPayload(r *http.Request) ([]byte, error) {
 		if err = c.ReadBody(&raw); err != nil {
 			return nil, err
 		}
-		return ([]byte)(raw), nil
+		return raw, nil
 	case strings.Contains(ct, "application/proto-rpc"), strings.Contains(ct, "application/octet-stream"):
 		msg := codec.Message{
 			Type:   codec.Request,
@@ -441,9 +441,8 @@ func requestPayload(r *http.Request) ([]byte, error) {
 			return out, nil
 		}
 
-		//fallback to previous unknown behaviour
+		// fallback to previous unknown behaviour
 		return bodybuf, nil
-
 	}
 
 	return []byte{}, nil

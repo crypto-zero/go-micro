@@ -4,19 +4,22 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"strings"
+	"sync"
 	"time"
 
-	"github.com/gobwas/httphead"
-	"github.com/gobwas/ws"
-	"github.com/gobwas/ws/wsutil"
+	"github.com/gobwas/ws/wsflate"
+
 	"github.com/crypto-zero/go-micro/v2/api"
 	"github.com/crypto-zero/go-micro/v2/client"
 	"github.com/crypto-zero/go-micro/v2/client/selector"
 	raw "github.com/crypto-zero/go-micro/v2/codec/bytes"
 	"github.com/crypto-zero/go-micro/v2/logger"
+	"github.com/gobwas/ws"
+	"github.com/gobwas/ws/wsutil"
 )
 
 // serveWebsocket will stream rpc back over websockets assuming json
@@ -55,6 +58,13 @@ func serveWebsocket(ctx context.Context, w http.ResponseWriter, r *http.Request,
 		return
 	}
 
+	// We are using default parameters here since we use
+	// wsflate.{Compress,Decompress}Frame helpers below in the code.
+	// This assumes that we use standard compress/flate package as flate
+	// implementation.
+	e := wsflate.Extension{
+		Parameters: wsflate.DefaultParameters,
+	}
 	upgrader := ws.HTTPUpgrader{Timeout: 5 * time.Second,
 		Protocol: func(proto string) bool {
 			if strings.Contains(proto, "binary") {
@@ -63,11 +73,8 @@ func serveWebsocket(ctx context.Context, w http.ResponseWriter, r *http.Request,
 			// fallback to support all protocols now
 			return true
 		},
-		Extension: func(httphead.Option) bool {
-			// disable extensions for compatibility
-			return false
-		},
-		Header: hdr,
+		Negotiate: e.Negotiate,
+		Header:    hdr,
 	}
 
 	conn, rw, _, err := upgrader.Upgrade(r, w)
@@ -77,6 +84,8 @@ func serveWebsocket(ctx context.Context, w http.ResponseWriter, r *http.Request,
 		}
 		return
 	}
+
+	_, compression := e.Accepted()
 
 	defer func() {
 		if err := conn.Close(); err != nil {
@@ -129,7 +138,8 @@ func serveWebsocket(ctx context.Context, w http.ResponseWriter, r *http.Request,
 		}
 	}
 
-	go writeLoop(rw, stream)
+	writeLock := new(sync.Mutex)
+	go writeLoop(compression, rw, stream, writeLock)
 
 	rsp := stream.Response()
 
@@ -154,8 +164,27 @@ func serveWebsocket(ctx context.Context, w http.ResponseWriter, r *http.Request,
 				return
 			}
 
+			var frame ws.Frame
+			if op == ws.OpText {
+				frame = ws.NewTextFrame(buf)
+			} else {
+				frame = ws.NewBinaryFrame(buf)
+			}
+			if compression {
+				frame, err = wsflate.CompressFrame(frame)
+				if err != nil {
+					if logger.V(logger.ErrorLevel, logger.DefaultLogger) {
+						logger.Error(err)
+					}
+					return
+				}
+			}
+
 			// write the response
-			if err := wsutil.WriteServerMessage(rw, op, buf); err != nil {
+			writeLock.Lock()
+			err = ws.WriteFrame(rw, frame)
+			writeLock.Unlock()
+			if err != nil {
 				if logger.V(logger.ErrorLevel, logger.DefaultLogger) {
 					logger.Error(err)
 				}
@@ -172,7 +201,7 @@ func serveWebsocket(ctx context.Context, w http.ResponseWriter, r *http.Request,
 }
 
 // writeLoop
-func writeLoop(rw io.ReadWriter, stream client.Stream) {
+func writeLoop(compression bool, rw io.ReadWriter, stream client.Stream, writeLock *sync.Mutex) {
 	// close stream when done
 	defer stream.Close()
 
@@ -181,7 +210,7 @@ func writeLoop(rw io.ReadWriter, stream client.Stream) {
 		case <-stream.Context().Done():
 			return
 		default:
-			buf, op, err := wsutil.ReadClientData(rw)
+			frame, err := ws.ReadFrame(rw)
 			if err != nil {
 				if wserr, ok := err.(wsutil.ClosedError); ok {
 					switch wserr.Code {
@@ -198,9 +227,51 @@ func writeLoop(rw io.ReadWriter, stream client.Stream) {
 				}
 				return
 			}
-			switch op {
+
+			frame = ws.UnmaskFrameInPlace(frame)
+			ok, err := wsflate.IsCompressed(frame.Header)
+			if err != nil {
+				if logger.V(logger.ErrorLevel, logger.DefaultLogger) {
+					logger.Error(err)
+				}
+				return
+			}
+			// Note that even after successful negotiation of
+			// compression extension, both sides are able to send
+			// non-compressed messages.
+			if ok {
+				frame, err = wsflate.DecompressFrame(frame)
+				if err != nil {
+					if logger.V(logger.ErrorLevel, logger.DefaultLogger) {
+						logger.Error(err)
+					}
+					return
+				}
+			}
+
+			switch frame.Header.OpCode {
 			default:
 				// not relevant
+				continue
+			case ws.OpPing:
+				f := ws.NewPongFrame(frame.Payload)
+				if compression {
+					if f, err = wsflate.CompressFrame(f); err != nil {
+						if logger.V(logger.ErrorLevel, logger.DefaultLogger) {
+							logger.Error(fmt.Errorf("ws compress poing failed: %w", err))
+						}
+						return
+					}
+				}
+				writeLock.Lock()
+				err = ws.WriteFrame(rw, f)
+				writeLock.Unlock()
+				if err != nil {
+					if logger.V(logger.ErrorLevel, logger.DefaultLogger) {
+						logger.Error(fmt.Errorf("ws write poing failed: %w", err))
+					}
+					return
+				}
 				continue
 			case ws.OpText, ws.OpBinary:
 				break
@@ -208,8 +279,8 @@ func writeLoop(rw io.ReadWriter, stream client.Stream) {
 			// send to backend
 			// default to trying json
 			// if the extracted payload isn't empty lets use it
-			request := &raw.Frame{Data: buf}
-			if err := stream.Send(request); err != nil {
+			request := &raw.Frame{Data: frame.Payload}
+			if err = stream.Send(request); err != nil {
 				if logger.V(logger.ErrorLevel, logger.DefaultLogger) {
 					logger.Error(err)
 				}
