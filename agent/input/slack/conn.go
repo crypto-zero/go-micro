@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/crypto-zero/go-micro/v2/agent/input"
-	"github.com/nlopes/slack"
+	"github.com/slack-go/slack"
 )
 
 // Satisfies the input.Conn interface

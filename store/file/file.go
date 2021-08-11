@@ -10,8 +10,8 @@ import (
 	"sync"
 	"time"
 
-	bolt "go.etcd.io/bbolt"
 	"github.com/crypto-zero/go-micro/v2/store"
+	bolt "go.etcd.io/bbolt"
 )
 
 var (

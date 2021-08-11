@@ -30,12 +30,13 @@ require (
 	github.com/lucas-clemente/quic-go v0.22.0
 	github.com/miekg/dns v1.1.43
 	github.com/mitchellh/hashstructure v1.1.0
-	github.com/nats-io/nats-server/v2 v2.3.4 // indirect
-	github.com/nats-io/nats.go v1.11.1-0.20210623165838-4b75fc59ae30
-	github.com/nlopes/slack v0.6.1-0.20191106133607-d06c2a2b3249
+	github.com/nats-io/jwt/v2 v2.0.3 // indirect
+	github.com/nats-io/nats-server/v2 v2.3.0 // indirect
+	github.com/nats-io/nats.go v1.11.0
 	github.com/oxtoacart/bpool v0.0.0-20190530202638-03653db5a59c
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/pkg/errors v0.9.1
+	github.com/slack-go/slack v0.9.4
 	github.com/stretchr/testify v1.7.0
 	github.com/urfave/cli/v2 v2.3.0
 	go.etcd.io/bbolt v1.3.6
@@ -46,6 +47,6 @@ require (
 	golang.org/x/net v0.0.0-20210805182204-aaa1db679c0d
 	google.golang.org/genproto v0.0.0-20210809142519-0135a39c2737
 	google.golang.org/grpc v1.39.1
-	google.golang.org/grpc/examples v0.0.0-20210810031557-01bababd8349
+	google.golang.org/grpc/examples v0.0.0-20210811033126-c7c1e9e0ec7a
 	google.golang.org/protobuf v1.27.1
 )
