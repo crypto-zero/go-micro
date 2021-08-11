@@ -2,7 +2,7 @@
 package input
 
 import (
-	"github.com/crypto-zero/cli/v2"
+	"github.com/urfave/cli/v2"
 )
 
 type EventType string

@@ -4,7 +4,6 @@ import (
 	"context"
 	"time"
 
-	"github.com/crypto-zero/cli/v2"
 	"github.com/crypto-zero/go-micro/v2/auth"
 	"github.com/crypto-zero/go-micro/v2/broker"
 	"github.com/crypto-zero/go-micro/v2/client"
@@ -18,6 +17,7 @@ import (
 	"github.com/crypto-zero/go-micro/v2/server"
 	"github.com/crypto-zero/go-micro/v2/store"
 	"github.com/crypto-zero/go-micro/v2/transport"
+	"github.com/urfave/cli/v2"
 )
 
 // Options for micro service

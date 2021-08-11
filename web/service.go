@@ -12,7 +12,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/crypto-zero/cli/v2"
 	"github.com/crypto-zero/go-micro/v2"
 	"github.com/crypto-zero/go-micro/v2/logger"
 	"github.com/crypto-zero/go-micro/v2/registry"
@@ -23,6 +22,7 @@ import (
 	mnet "github.com/crypto-zero/go-micro/v2/util/net"
 	signalutil "github.com/crypto-zero/go-micro/v2/util/signal"
 	mls "github.com/crypto-zero/go-micro/v2/util/tls"
+	"github.com/urfave/cli/v2"
 )
 
 type service struct {

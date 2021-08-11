@@ -35,7 +35,7 @@ import (
 	cmucp "github.com/crypto-zero/go-micro/v2/client/mucp"
 
 	// servers
-	"github.com/crypto-zero/cli/v2"
+	"github.com/urfave/cli/v2"
 
 	sgrpc "github.com/crypto-zero/go-micro/v2/server/grpc"
 	smucp "github.com/crypto-zero/go-micro/v2/server/mucp"

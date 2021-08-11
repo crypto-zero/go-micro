@@ -4,9 +4,9 @@ import (
 	"errors"
 	"sync"
 
-	"github.com/crypto-zero/cli/v2"
 	"github.com/crypto-zero/go-micro/v2/agent/input"
 	"github.com/nlopes/slack"
+	"github.com/urfave/cli/v2"
 )
 
 type slackInput struct {

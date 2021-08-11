@@ -5,11 +5,11 @@ import (
 	"os"
 	"testing"
 
-	"github.com/crypto-zero/cli/v2"
 	"github.com/crypto-zero/go-micro/v2"
 	"github.com/crypto-zero/go-micro/v2/config"
 	"github.com/crypto-zero/go-micro/v2/config/cmd"
 	"github.com/crypto-zero/go-micro/v2/config/source"
+	"github.com/urfave/cli/v2"
 )
 
 func TestCliSourceDefault(t *testing.T) {

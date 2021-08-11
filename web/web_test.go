@@ -7,10 +7,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/crypto-zero/cli/v2"
 	"github.com/crypto-zero/go-micro/v2"
 	"github.com/crypto-zero/go-micro/v2/logger"
 	"github.com/crypto-zero/go-micro/v2/web"
+	"github.com/urfave/cli/v2"
 )
 
 func TestWeb(t *testing.T) {

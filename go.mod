@@ -7,7 +7,6 @@ require (
 	github.com/bitly/go-simplejson v0.5.1-0.20200416141419-39a59b1b2866
 	github.com/bwmarrin/discordgo v0.23.2
 	github.com/caddyserver/certmagic v0.14.1
-	github.com/crypto-zero/cli/v2 v2.2.3
 	github.com/davecgh/go-spew v1.1.1
 	github.com/ef-ds/deque v1.0.4
 	github.com/evanphx/json-patch/v5 v5.5.0
@@ -18,7 +17,6 @@ require (
 	github.com/go-acme/lego/v3 v3.9.0
 	github.com/go-git/go-git/v5 v5.4.2
 	github.com/go-telegram-bot-api/telegram-bot-api/v5 v5.0.0-rc1
-	github.com/gobwas/httphead v0.1.0
 	github.com/gobwas/ws v1.1.0
 	github.com/golang-jwt/jwt/v4 v4.0.0
 	github.com/golang/protobuf v1.5.2
@@ -39,6 +37,7 @@ require (
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/pkg/errors v0.9.1
 	github.com/stretchr/testify v1.7.0
+	github.com/urfave/cli/v2 v2.3.0
 	go.etcd.io/bbolt v1.3.6
 	go.etcd.io/etcd/api/v3 v3.5.0
 	go.etcd.io/etcd/client/v3 v3.5.0

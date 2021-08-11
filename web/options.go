@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/crypto-zero/cli/v2"
 	"github.com/crypto-zero/go-micro/v2"
 	"github.com/crypto-zero/go-micro/v2/registry"
+	"github.com/urfave/cli/v2"
 )
 
 //Options for web
