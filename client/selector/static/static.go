@@ -2,9 +2,12 @@
 package static
 
 import (
+	"context"
 	"github.com/crypto-zero/go-micro/v2/client/selector"
 	"github.com/crypto-zero/go-micro/v2/registry"
 )
+
+type staticAddressOption struct{}
 
 // staticSelector is a static selector
 type staticSelector struct {
@@ -23,10 +26,14 @@ func (s *staticSelector) Options() selector.Options {
 }
 
 func (s *staticSelector) Select(service string, opts ...selector.SelectOption) (selector.Next, error) {
+	address := service
+	if addressValue := s.opts.Context.Value(staticAddressOption{}); addressValue != nil {
+		address = addressValue.(string)
+	}
 	return func() (*registry.Node, error) {
 		return &registry.Node{
 			Id:      service,
-			Address: service,
+			Address: address,
 		}, nil
 	}, nil
 }
@@ -45,6 +52,12 @@ func (s *staticSelector) Close() error {
 
 func (s *staticSelector) String() string {
 	return "static"
+}
+
+func WithStaticAddress(address string) selector.Option {
+	return func(o *selector.Options) {
+		o.Context = context.WithValue(o.Context, staticAddressOption{}, address)
+	}
 }
 
 func NewSelector(opts ...selector.Option) selector.Selector {
