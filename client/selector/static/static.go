@@ -56,6 +56,9 @@ func (s *staticSelector) String() string {
 
 func WithStaticAddress(address string) selector.Option {
 	return func(o *selector.Options) {
+		if o.Context == nil {
+			o.Context = context.Background()
+		}
 		o.Context = context.WithValue(o.Context, staticAddressOption{}, address)
 	}
 }
