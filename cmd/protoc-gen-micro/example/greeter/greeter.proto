@@ -1,0 +1,23 @@
+syntax = "proto3";
+package greeter;
+option go_package = "github.com/crypto-zero/go-micro/cmd/protoc-gen-micro/v2/example/greeter";
+
+import "person/person.proto";
+
+// service comments
+service Greeter {
+	// function comments
+	rpc Hello(Request) returns (Response) {}
+	rpc Stream(stream Request) returns (stream Response) {}
+	rpc StreamA(Request) returns (stream Response) {}
+	rpc StreamB(stream Request) returns (Response) {}
+	rpc FindPerson(person.Person) returns (person.Person) {}
+}
+
+message Request {
+	string name = 1;
+}
+
+message Response {
+	string msg = 1;
+}

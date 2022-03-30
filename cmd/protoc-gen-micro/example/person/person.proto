@@ -1,0 +1,7 @@
+syntax = "proto3";
+package person;
+option go_package = "github.com/crypto-zero/go-micro/cmd/protoc-gen-micro/v2/example/person";
+
+message Person {
+  string name = 1;
+}
