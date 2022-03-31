@@ -6,7 +6,6 @@ import (
 
 	"github.com/crypto-zero/go-micro/v2/store"
 	"github.com/crypto-zero/go-micro/v2/store/memory"
-	"github.com/pkg/errors"
 )
 
 type cache struct {
@@ -86,13 +85,13 @@ func (c *cache) Read(key string, opts ...store.ReadOption) ([]*store.Record, err
 		}
 		keys, err := c.List(lOpts...)
 		if err != nil {
-			return []*store.Record{}, errors.Wrap(err, "cache.List failed")
+			return []*store.Record{}, fmt.Errorf("cache.List failed: %w", err)
 		}
 		recs := make([]*store.Record, len(keys))
 		for i, k := range keys {
 			r, err := c.readOne(k, opts...)
 			if err != nil {
-				return recs, errors.Wrap(err, "cache.readOne failed")
+				return recs, fmt.Errorf("cache.readOne failed: %w", err)
 			}
 			recs[i] = r
 		}
@@ -113,12 +112,12 @@ func (c *cache) readOne(key string, opts ...store.ReadOption) (*store.Record, er
 		r, err := s.Read(key)
 		if err == nil {
 			if len(r) > 1 {
-				return nil, errors.Wrapf(err, "read from L%d cache (%s) returned multiple records", i, c.stores[i].String())
+				return nil, fmt.Errorf("read from L%d cache (%s) returned multiple records: %w", i, c.stores[i].String(), err)
 			}
 			for j := i - 1; j >= 0; j-- {
 				err := c.stores[j].Write(r[0])
 				if err != nil {
-					return nil, errors.Wrapf(err, "could not write to L%d cache (%s)", j, c.stores[j].String())
+					return nil, fmt.Errorf("could not write to L%d cache (%s): %w", j, c.stores[j].String(), err)
 				}
 			}
 			return r[0], nil
@@ -131,7 +130,7 @@ func (c *cache) Write(r *store.Record, opts ...store.WriteOption) error {
 	// Write to all layers in reverse
 	for i := len(c.stores) - 1; i >= 0; i-- {
 		if err := c.stores[i].Write(r, opts...); err != nil {
-			return errors.Wrapf(err, "could not write to L%d cache (%s)", i, c.stores[i].String())
+			return fmt.Errorf("could not write to L%d cache (%s): %w", i, c.stores[i].String(), err)
 		}
 	}
 	return nil
@@ -140,7 +139,7 @@ func (c *cache) Write(r *store.Record, opts ...store.WriteOption) error {
 func (c *cache) Delete(key string, opts ...store.DeleteOption) error {
 	for i, s := range c.stores {
 		if err := s.Delete(key, opts...); err != nil {
-			return errors.Wrapf(err, "could not delete from L%d cache (%s)", i, c.stores[i].String())
+			return fmt.Errorf("could not delete from L%d cache (%s): %w", i, c.stores[i].String(), err)
 		}
 	}
 	return nil

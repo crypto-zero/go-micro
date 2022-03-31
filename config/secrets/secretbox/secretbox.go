@@ -3,11 +3,12 @@
 package secretbox
 
 import (
-	"github.com/crypto-zero/go-micro/v2/config/secrets"
-	"github.com/pkg/errors"
-	"golang.org/x/crypto/nacl/secretbox"
-
 	"crypto/rand"
+	"errors"
+	"fmt"
+
+	"github.com/crypto-zero/go-micro/v2/config/secrets"
+	"golang.org/x/crypto/nacl/secretbox"
 )
 
 const keyLength = 32
@@ -35,7 +36,7 @@ func (s *secretBox) Init(opts ...secrets.Option) error {
 		return errors.New("no secret key is defined")
 	}
 	if len(s.options.Key) != keyLength {
-		return errors.Errorf("secret key must be %d bytes long", keyLength)
+		return fmt.Errorf("secret key must be %d bytes long", keyLength)
 	}
 	copy(s.secretKey[:], s.options.Key)
 	return nil
@@ -55,7 +56,7 @@ func (s *secretBox) Encrypt(in []byte, opts ...secrets.EncryptOption) ([]byte, e
 	// there must be a unique nonce for each message
 	var nonce [24]byte
 	if _, err := rand.Reader.Read(nonce[:]); err != nil {
-		return []byte{}, errors.Wrap(err, "couldn't obtain a random nonce from crypto/rand")
+		return []byte{}, fmt.Errorf("couldn't obtain a random nonce from crypto/rand: %w", err)
 	}
 	return secretbox.Seal(nonce[:], in, &nonce, &s.secretKey), nil
 }

@@ -2,6 +2,7 @@
 package memory
 
 import (
+	"errors"
 	"path/filepath"
 	"sort"
 	"strings"
@@ -9,7 +10,6 @@ import (
 
 	"github.com/crypto-zero/go-micro/v2/store"
 	"github.com/patrickmn/go-cache"
-	"github.com/pkg/errors"
 )
 
 // NewStore returns a memory store
@@ -65,7 +65,7 @@ func (m *memoryStore) get(prefix, key string) (*store.Record, error) {
 
 	storedRecord, ok := r.(*storeRecord)
 	if !ok {
-		return nil, errors.New("Retrieved a non *storeRecord from the cache")
+		return nil, errors.New("retrieved a non *storeRecord from the cache")
 	}
 
 	// Copy the record on the way out

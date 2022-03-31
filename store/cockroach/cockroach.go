@@ -3,6 +3,7 @@ package cockroach
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 	"net/url"
 	"regexp"
@@ -10,10 +11,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/lib/pq"
 	"github.com/crypto-zero/go-micro/v2/logger"
 	"github.com/crypto-zero/go-micro/v2/store"
-	"github.com/pkg/errors"
+	"github.com/lib/pq"
 )
 
 // DefaultDatabase is the namespace that the sql store
@@ -100,7 +100,7 @@ func (s *sqlStore) initDB(database, table string) error {
 
 	_, err = s.db.Exec(fmt.Sprintf("SET DATABASE = %s;", database))
 	if err != nil {
-		return errors.Wrap(err, "Couldn't set database")
+		return fmt.Errorf("couldn't set database: %w", err)
 	}
 
 	// Create a table for the namespace's prefix
@@ -113,7 +113,7 @@ func (s *sqlStore) initDB(database, table string) error {
 		CONSTRAINT %s_pkey PRIMARY KEY (key)
 	);`, table, table))
 	if err != nil {
-		return errors.Wrap(err, "Couldn't create table")
+		return fmt.Errorf("couldn't create table: %w", err)
 	}
 
 	// Create Index
@@ -355,7 +355,7 @@ func (s *sqlStore) read(key string, options store.ReadOptions) ([]*store.Record,
 		if err == sql.ErrNoRows {
 			return []*store.Record{}, nil
 		}
-		return []*store.Record{}, errors.Wrap(err, "sqlStore.read failed")
+		return []*store.Record{}, fmt.Errorf("sqlStore.read failed: %w", err)
 	}
 
 	defer rows.Close()
@@ -428,7 +428,7 @@ func (s *sqlStore) Write(r *store.Record, opts ...store.WriteOption) error {
 	}
 
 	if err != nil {
-		return errors.Wrap(err, "Couldn't insert record "+r.Key)
+		return fmt.Errorf("couldn't insert record %s: %w", r.Key, err)
 	}
 
 	return nil

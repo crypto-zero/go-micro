@@ -2,13 +2,13 @@
 package sync
 
 import (
+	"errors"
 	"fmt"
 	"sync"
 	"time"
 
-	"github.com/ef-ds/deque"
 	"github.com/crypto-zero/go-micro/v2/store"
-	"github.com/pkg/errors"
+	"github.com/ef-ds/deque"
 )
 
 // Sync implements a sync in for stores
@@ -59,7 +59,7 @@ func (c *syncStore) Init(opts ...store.Option) error {
 	}
 	for _, s := range c.syncOpts.Stores {
 		if err := s.Init(); err != nil {
-			return errors.Wrapf(err, "Store %s failed to Init()", s.String())
+			return fmt.Errorf("store %s failed to Init(): %w", s.String(), err)
 		}
 	}
 	c.pendingWrites = make([]*deque.Deque, len(c.syncOpts.Stores)-1)

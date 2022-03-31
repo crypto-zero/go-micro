@@ -2,11 +2,12 @@
 package box
 
 import (
-	"github.com/crypto-zero/go-micro/v2/config/secrets"
-	"github.com/pkg/errors"
-	naclbox "golang.org/x/crypto/nacl/box"
-
 	"crypto/rand"
+	"errors"
+	"fmt"
+
+	"github.com/crypto-zero/go-micro/v2/config/secrets"
+	naclbox "golang.org/x/crypto/nacl/box"
 )
 
 const keyLength = 32
@@ -33,7 +34,7 @@ func (b *box) Init(opts ...secrets.Option) error {
 		o(&b.options)
 	}
 	if len(b.options.PrivateKey) != keyLength || len(b.options.PublicKey) != keyLength {
-		return errors.Errorf("a public key and a private key of length %d must both be provided", keyLength)
+		return fmt.Errorf("a public key and a private key of length %d must both be provided", keyLength)
 	}
 	copy(b.privateKey[:], b.options.PrivateKey)
 	copy(b.publicKey[:], b.options.PublicKey)
@@ -63,7 +64,7 @@ func (b *box) Encrypt(in []byte, opts ...secrets.EncryptOption) ([]byte, error) 
 	copy(recipientPublicKey[:], options.RecipientPublicKey)
 	var nonce [24]byte
 	if _, err := rand.Reader.Read(nonce[:]); err != nil {
-		return []byte{}, errors.Wrap(err, "couldn't obtain a random nonce from crypto/rand")
+		return []byte{}, fmt.Errorf("couldn't obtain a random nonce from crypto/rand: %w", err)
 	}
 	return naclbox.Seal(nonce[:], in, &nonce, &recipientPublicKey, &b.privateKey), nil
 }
