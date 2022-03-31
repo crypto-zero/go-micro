@@ -24,6 +24,9 @@ func TestCliSourceDefault(t *testing.T) {
 			&cli.BoolFlag{
 				Name: "test.v",
 			},
+			&cli.BoolFlag{
+				Name: "test.paniconexit0",
+			},
 			&cli.StringFlag{
 				Name: "test.run",
 			},
@@ -49,7 +52,9 @@ func TestCliSourceDefault(t *testing.T) {
 		}),
 	)
 
-	config.Load(cliSrc)
+	if err := config.Load(cliSrc); err != nil {
+		t.Fatalf("load config failed: %+v", err)
+	}
 	if fval := config.Get("flag").String("default"); fval != expVal {
 		t.Fatalf("default flag value not loaded %v != %v", fval, expVal)
 	}
@@ -101,7 +106,6 @@ func test(t *testing.T, withContext bool) {
 	if actualDB["host"] != "localhost" {
 		t.Errorf("expected localhost, got %v", actualDB["name"])
 	}
-
 }
 
 func TestCliSource(t *testing.T) {
