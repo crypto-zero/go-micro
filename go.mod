@@ -44,9 +44,9 @@ require (
 	go.uber.org/zap v1.21.0
 	golang.org/x/crypto v0.0.0-20220321153916-2c7772ba3064
 	golang.org/x/net v0.0.0-20220325170049-de3da57026de
-	google.golang.org/genproto v0.0.0-20220329135034-5a5e19f58d62
+	google.golang.org/genproto v0.0.0-20220329172620-7be39ac1afc7
 	google.golang.org/grpc v1.45.0
-	google.golang.org/grpc/examples v0.0.0-20220328174708-562e12f07b7f
+	google.golang.org/grpc/examples v0.0.0-20220330220137-99aae3442dbe
 	google.golang.org/protobuf v1.28.0
 )
 
