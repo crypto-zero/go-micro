@@ -52,12 +52,11 @@ func TestCodecWriteError(t *testing.T) {
 		Id:       "0",
 		Error:    "",
 	}, "body")
-
 	if err != nil {
 		t.Fatalf(`Expected Write to fail; got "%+v" instead`, err)
 	}
 
-	const expectedError = "Unable to encode body: simulating a codec write failure"
+	const expectedError = "unable to encode body: simulating a codec write failure"
 	actualError := rwc.wbuf.String()
 	if actualError != expectedError {
 		t.Fatalf(`Expected error "%+v" in the write buffer, got "%+v" instead`, expectedError, actualError)
