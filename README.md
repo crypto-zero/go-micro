@@ -1,6 +1,10 @@
-# Go Micro [![License](https://img.shields.io/:license-apache-blue.svg)](https://opensource.org/licenses/Apache-2.0) [![Go.Dev reference](https://img.shields.io/badge/go.dev-reference-007d9c?logo=go&logoColor=white&style=flat-square)](https://pkg.go.dev/github.com/crypto-zero/go-micro?tab=doc) [![Travis CI](https://api.travis-ci.org/micro/go-micro.svg?branch=master)](https://travis-ci.org/micro/go-micro) [![Go Report Card](https://goreportcard.com/badge/micro/go-micro)](https://goreportcard.com/report/github.com/crypto-zero/go-micro) 
+# Go Micro [![License](https://img.shields.io/:license-apache-blue.svg)](https://opensource.org/licenses/Apache-2.0) [![Go.Dev reference](https://img.shields.io/badge/go.dev-reference-007d9c?logo=go&logoColor=white&style=flat-square)](https://pkg.go.dev/github.com/crypto-zero/go-micro/v2?tab=doc) [![Travis CI](https://api.travis-ci.org/micro/go-micro.svg?branch=master)](https://travis-ci.org/micro/go-micro) [![Go Report Card](https://goreportcard.com/badge/micro/go-micro)](https://goreportcard.com/report/github.com/crypto-zero/go-micro) 
 
 Go Micro is a framework for distributed systems development.
+
+## Why this project
+
+**Since go-micro born that APIs change fast and associative projects has been removed. this project keep update with all dependencies up-to-date and made break changes without new major version. fork from asim/go-micro major version 2.**
 
 ## Overview
 
@@ -43,8 +47,7 @@ Event notifications are a core pattern in micro service development. The default
 leadership are built in as a Sync interface. When using an eventually consistent database or scheduling use the Sync interface.
 
 - **Pluggable Interfaces** - Go Micro makes use of Go interfaces for each distributed system abstraction. Because of this these interfaces 
-are pluggable and allows Go Micro to be runtime agnostic. You can plugin any underlying technology. Find plugins in 
-[github.com/crypto-zero/go-plugins](https://github.com/crypto-zero/go-plugins).
+are pluggable and allows Go Micro to be runtime agnostic. You can plugin any underlying technology.
 
 ## Getting Started
 
@@ -64,8 +67,6 @@ service.Init()
 // start the service
 service.Run()
 ```
-
-See the [docs](https://dev.m3o.com) for detailed information on the architecture, installation and use of go-micro.
 
 ## License
 
