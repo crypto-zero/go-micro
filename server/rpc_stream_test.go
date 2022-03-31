@@ -11,7 +11,6 @@ import (
 
 	"github.com/crypto-zero/go-micro/v2/codec/json"
 	protoCodec "github.com/crypto-zero/go-micro/v2/codec/proto"
-	"github.com/crypto-zero/go-micro/v2/server/proto"
 )
 
 // safeBuffer throws away everything and wont Read data back
@@ -101,7 +100,7 @@ func TestRPCStream_Concurrency(t *testing.T) {
 
 		go func() {
 			for i := 0; i < 50; i++ {
-				msg := &proto.ProtoStruct{Payload: "test"}
+				msg := &ProtoStruct{Payload: "test"}
 				<-time.After(time.Duration(rand.Intn(50)) * time.Millisecond)
 				if err := streamServer.Send(msg); err != nil {
 					t.Errorf("Unexpected Send error: %s", err)
@@ -113,7 +112,7 @@ func TestRPCStream_Concurrency(t *testing.T) {
 		go func() {
 			for i := 0; i < 50; i++ {
 				<-time.After(time.Duration(rand.Intn(50)) * time.Millisecond)
-				if err := streamServer.Recv(&proto.ProtoStruct{}); err != nil {
+				if err := streamServer.Recv(&ProtoStruct{}); err != nil {
 					t.Errorf("Unexpected Recv error: %s", err)
 				}
 			}

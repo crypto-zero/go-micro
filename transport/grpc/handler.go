@@ -12,12 +12,12 @@ import (
 
 // microTransport satisfies the pb.TransportServer inteface
 type microTransport struct {
+	pb.UnimplementedTransportServer
 	addr string
 	fn   func(transport.Socket)
 }
 
 func (m *microTransport) Stream(ts pb.Transport_StreamServer) (err error) {
-
 	sock := &grpcTransportSocket{
 		stream: ts,
 		local:  m.addr,

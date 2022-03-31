@@ -4,6 +4,7 @@ go 1.18
 
 require (
 	github.com/crypto-zero/go-micro/v2 v2.9.7
+	google.golang.org/genproto v0.0.0-20211129164237-f09f9a12af12
 	google.golang.org/protobuf v1.28.0
 )
 

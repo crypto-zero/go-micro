@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"strings"
 
+	options "google.golang.org/genproto/googleapis/api/annotations"
 	"google.golang.org/protobuf/compiler/protogen"
+	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/descriptorpb"
 )
 
@@ -70,6 +72,24 @@ func generateFileContent(file *protogen.File, g *protogen.GeneratedFile) {
 
 func genService(g *protogen.GeneratedFile, service *protogen.Service) {
 	clientName := service.GoName + "Service"
+
+	// generate new api endpoints function
+	g.P()
+	g.P("// ", "New", service.GoName, "Endpoints", " API Endpoints for ", service.GoName, " service")
+	g.P("func New", service.GoName, "Endpoints () []*", apiPackage.Ident("Endpoint"), " {")
+	g.P("return []*", apiPackage.Ident("Endpoint"), "{")
+	for _, method := range service.Methods {
+		opt := method.Desc.Options()
+		if opt == nil || !proto.HasExtension(opt, options.E_Http) {
+			continue
+		}
+		g.P("&", apiPackage.Ident("Endpoint"), "{")
+		generateEndpoint(service.GoName, method, g)
+		g.P("},")
+	}
+	g.P("}")
+	g.P("}")
+	g.P()
 
 	g.P()
 	g.P("// ", clientName, " is the client API for ", service.GoName, " service.")
@@ -164,6 +184,15 @@ func genService(g *protogen.GeneratedFile, service *protogen.Service) {
 	g.P(unexport(service.GoName))
 	g.P("}")
 	g.P("h := &", unexport(service.GoName), "Handler{hdlr}")
+	for _, method := range service.Methods {
+		opt := method.Desc.Options()
+		if opt == nil || !proto.HasExtension(opt, options.E_Http) {
+			continue
+		}
+		g.P("opts = append(opts, ", apiPackage.Ident("WithEndpoint"), "(&", apiPackage.Ident("Endpoint"), "{")
+		generateEndpoint(service.GoName, method, g)
+		g.P("}))")
+	}
 	g.P("return s.Handle(s.NewHandler(&", service.GoName, "{h}, opts...))")
 	g.P("}")
 	g.P()
@@ -396,6 +425,50 @@ func generateServerMethod(servName string, g *protogen.GeneratedFile, method *pr
 	}
 
 	return hname
+}
+
+// generateEndpoint creates the api endpoint
+func generateEndpoint(servName string, method *protogen.Method, g *protogen.GeneratedFile) {
+	opt := method.Desc.Options()
+	if opt == nil || !proto.HasExtension(opt, options.E_Http) {
+		return
+	}
+	// http rules
+	r := proto.GetExtension(opt, options.E_Http)
+	rule := r.(*options.HttpRule)
+	var meth string
+	var path string
+	switch {
+	case len(rule.GetDelete()) > 0:
+		meth = "DELETE"
+		path = rule.GetDelete()
+	case len(rule.GetGet()) > 0:
+		meth = "GET"
+		path = rule.GetGet()
+	case len(rule.GetPatch()) > 0:
+		meth = "PATCH"
+		path = rule.GetPatch()
+	case len(rule.GetPost()) > 0:
+		meth = "POST"
+		path = rule.GetPost()
+	case len(rule.GetPut()) > 0:
+		meth = "PUT"
+		path = rule.GetPut()
+	}
+	if len(meth) == 0 || len(path) == 0 {
+		return
+	}
+	// TODO: process additional bindings
+	g.P("Name:", fmt.Sprintf(`"%s.%s",`, servName, method.GoName))
+	g.P("Path:", fmt.Sprintf(`[]string{"%s"},`, path))
+	g.P("Method:", fmt.Sprintf(`[]string{"%s"},`, meth))
+	if len(rule.GetGet()) == 0 {
+		g.P("Body:", fmt.Sprintf(`"%s",`, rule.GetBody()))
+	}
+	if method.Desc.IsStreamingServer() || method.Desc.IsStreamingClient() {
+		g.P("Stream: true,")
+	}
+	g.P(`Handler: "rpc",`)
 }
 
 const deprecationComment = "// Deprecated: Do not use."

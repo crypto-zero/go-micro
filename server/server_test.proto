@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+package go.micro.server.test;
+option go_package = "github.com/crypto-zero/go-micro/v2/server";
+
+message protoStruct {
+  string Payload = 1;
+}

@@ -15,7 +15,9 @@ import (
 )
 
 // server is used to implement helloworld.GreeterServer.
-type greeterServer struct{}
+type greeterServer struct {
+	pb.UnimplementedGreeterServer
+}
 
 // SayHello implements helloworld.GreeterServer
 func (g *greeterServer) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloReply, error) {
@@ -108,5 +110,4 @@ func TestGRPCClient(t *testing.T) {
 	if verr.Code != 99 && verr.Id != "1" && verr.Detail != "detail" {
 		t.Fatalf("invalid error received %#+v\n", verr)
 	}
-
 }
