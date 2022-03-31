@@ -1,6 +1,7 @@
 syntax = "proto3";
 
 package go.micro.api;
+option go_package = "github.com/crypto-zero/go-micro/v2/api/service/proto";
 
 service Api {
   rpc Register(Endpoint) returns (EmptyResponse) {};

@@ -1,6 +1,7 @@
 syntax = "proto3";
 
 package go.micro.client;
+option go_package = "github.com/crypto-zero/go-micro/v2/client/service/proto";
 
 // Client is the micro client interface
 service Client {

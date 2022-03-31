@@ -5,9 +5,9 @@ import (
 	"encoding/json"
 	"io"
 
-	"github.com/golang/protobuf/jsonpb"
-	"github.com/golang/protobuf/proto"
 	"github.com/crypto-zero/go-micro/v2/codec"
+	"google.golang.org/protobuf/encoding/protojson"
+	"google.golang.org/protobuf/proto"
 )
 
 type Codec struct {
@@ -24,8 +24,13 @@ func (c *Codec) ReadBody(b interface{}) error {
 	if b == nil {
 		return nil
 	}
+	// Parse the next JSON object from the stream.
 	if pb, ok := b.(proto.Message); ok {
-		return jsonpb.UnmarshalNext(c.Decoder, pb)
+		raw := json.RawMessage{}
+		if err := c.Decoder.Decode(&raw); err != nil {
+			return err
+		}
+		return protojson.Unmarshal(raw, pb)
 	}
 	return c.Decoder.Decode(b)
 }

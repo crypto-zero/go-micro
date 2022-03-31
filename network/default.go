@@ -11,7 +11,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/golang/protobuf/proto"
 	"github.com/crypto-zero/go-micro/v2/client"
 	cmucp "github.com/crypto-zero/go-micro/v2/client/mucp"
 	rtr "github.com/crypto-zero/go-micro/v2/client/selector/router"
@@ -29,6 +28,7 @@ import (
 	tun "github.com/crypto-zero/go-micro/v2/tunnel/transport"
 	"github.com/crypto-zero/go-micro/v2/util/backoff"
 	pbUtil "github.com/crypto-zero/go-micro/v2/util/proto"
+	"google.golang.org/protobuf/proto"
 )
 
 var (
@@ -1009,9 +1009,9 @@ func (n *network) processNetChan(listener tunnel.Listener) {
 						route.Metric = d
 					}
 
-					/////////////////////////////////////////////////////////////////////
+					// ///////////////////////////////////////////////////////////////////
 					//          maybe we should not be this clever ¯\_(ツ)_/¯          //
-					/////////////////////////////////////////////////////////////////////
+					// ///////////////////////////////////////////////////////////////////
 					// lookup best routes for the services in the just received route
 					q := []router.QueryOption{
 						router.QueryService(route.Service),
@@ -1053,8 +1053,8 @@ func (n *network) processNetChan(listener tunnel.Listener) {
 					if bestRoute.Metric <= route.Metric {
 						continue
 					}
-					///////////////////////////////////////////////////////////////////////
-					///////////////////////////////////////////////////////////////////////
+					// /////////////////////////////////////////////////////////////////////
+					// /////////////////////////////////////////////////////////////////////
 
 					// add route to the routing table
 					if err := n.router.Table().Create(route); err != nil && err != router.ErrDuplicateRoute {

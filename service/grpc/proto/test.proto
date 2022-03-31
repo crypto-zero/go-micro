@@ -1,5 +1,8 @@
 syntax = "proto3";
 
+package go.micro.service.grpc;
+option go_package = "github.com/crypto-zero/go-micro/v2/service/grpc/proto";
+
 service Test {
 	rpc Call(Request) returns (Response) {}
 }

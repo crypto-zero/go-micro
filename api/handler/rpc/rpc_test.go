@@ -6,12 +6,11 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/golang/protobuf/proto"
 	go_api "github.com/crypto-zero/go-micro/v2/api/proto"
+	"google.golang.org/protobuf/proto"
 )
 
 func TestRequestPayloadFromRequest(t *testing.T) {
-
 	// our test event so that we can validate serialising / deserializing of true protos works
 	protoEvent := go_api.Event{
 		Name: "Test",
@@ -75,7 +74,6 @@ func TestRequestPayloadFromRequest(t *testing.T) {
 	})
 
 	t.Run("extracting params from a GET request", func(t *testing.T) {
-
 		r, err := http.NewRequest("GET", "http://localhost/my/path", nil)
 		if err != nil {
 			t.Fatalf("Failed to created http.Request: %v", err)
@@ -95,7 +93,6 @@ func TestRequestPayloadFromRequest(t *testing.T) {
 	})
 
 	t.Run("GET request with no params", func(t *testing.T) {
-
 		r, err := http.NewRequest("GET", "http://localhost/my/path", nil)
 		if err != nil {
 			t.Fatalf("Failed to created http.Request: %v", err)

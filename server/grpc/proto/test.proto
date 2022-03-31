@@ -1,5 +1,8 @@
 syntax = "proto3";
 
+package go.micro.server.grpc.test;
+option go_package = "github.com/crypto-zero/go-micro/v2/server/grpc/proto";
+
 import "google/api/annotations.proto";
 
 service Test {

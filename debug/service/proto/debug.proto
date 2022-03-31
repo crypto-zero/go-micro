@@ -1,5 +1,8 @@
 syntax = "proto3";
 
+package go.micro.debug;
+option go_package = "github.com/crypto-zero/go-micro/v2/debug/service/proto";
+
 service Debug {
 	rpc Log(LogRequest) returns (stream Record) {};
 	rpc Health(HealthRequest) returns (HealthResponse) {};

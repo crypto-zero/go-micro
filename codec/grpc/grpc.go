@@ -8,8 +8,8 @@ import (
 	"io"
 	"strings"
 
-	"github.com/golang/protobuf/proto"
 	"github.com/crypto-zero/go-micro/v2/codec"
+	"google.golang.org/protobuf/proto"
 )
 
 type Codec struct {

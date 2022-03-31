@@ -1,4 +1,4 @@
-// Protorpc provides a net/rpc proto-rpc codec. See envelope.proto for the format.
+// Package protorpc provides a net/rpc proto-rpc codec. See envelope.proto for the format.
 package protorpc
 
 import (
@@ -8,8 +8,8 @@ import (
 	"strconv"
 	"sync"
 
-	"github.com/golang/protobuf/proto"
 	"github.com/crypto-zero/go-micro/v2/codec"
+	"google.golang.org/protobuf/proto"
 )
 
 type flusher interface {

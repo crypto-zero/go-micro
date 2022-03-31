@@ -9,19 +9,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/golang/protobuf/proto"
 	"github.com/crypto-zero/go-micro/v2/codec/json"
 	protoCodec "github.com/crypto-zero/go-micro/v2/codec/proto"
+	"github.com/crypto-zero/go-micro/v2/server/proto"
 )
-
-// protoStruct implements proto.Message
-type protoStruct struct {
-	Payload string `protobuf:"bytes,1,opt,name=service,proto3" json:"service,omitempty"`
-}
-
-func (m *protoStruct) Reset()         { *m = protoStruct{} }
-func (m *protoStruct) String() string { return proto.CompactTextString(m) }
-func (*protoStruct) ProtoMessage()    {}
 
 // safeBuffer throws away everything and wont Read data back
 type safeBuffer struct {
@@ -110,7 +101,7 @@ func TestRPCStream_Concurrency(t *testing.T) {
 
 		go func() {
 			for i := 0; i < 50; i++ {
-				msg := protoStruct{Payload: "test"}
+				msg := &proto.ProtoStruct{Payload: "test"}
 				<-time.After(time.Duration(rand.Intn(50)) * time.Millisecond)
 				if err := streamServer.Send(msg); err != nil {
 					t.Errorf("Unexpected Send error: %s", err)
@@ -122,7 +113,7 @@ func TestRPCStream_Concurrency(t *testing.T) {
 		go func() {
 			for i := 0; i < 50; i++ {
 				<-time.After(time.Duration(rand.Intn(50)) * time.Millisecond)
-				if err := streamServer.Recv(&protoStruct{}); err != nil {
+				if err := streamServer.Recv(&proto.ProtoStruct{}); err != nil {
 					t.Errorf("Unexpected Recv error: %s", err)
 				}
 			}

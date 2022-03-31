@@ -1,15 +1,9 @@
 package proto
 
 import (
-	"bytes"
-
-	"github.com/golang/protobuf/proto"
 	"github.com/crypto-zero/go-micro/v2/codec"
-	"github.com/oxtoacart/bpool"
+	"google.golang.org/protobuf/proto"
 )
-
-// create buffer pool with 16 instances each preallocated with 256 bytes
-var bufferPool = bpool.NewSizedBufferPool(16, 256)
 
 type Marshaler struct{}
 
@@ -19,18 +13,11 @@ func (Marshaler) Marshal(v interface{}) ([]byte, error) {
 		return nil, codec.ErrInvalidMessage
 	}
 
-	// looks not good, but allows to reuse underlining bytes
-	buf := bufferPool.Get()
-	pbuf := proto.NewBuffer(buf.Bytes())
-	defer func() {
-		bufferPool.Put(bytes.NewBuffer(pbuf.Bytes()))
-	}()
-
-	if err := pbuf.Marshal(pb); err != nil {
+	data, err := proto.Marshal(pb)
+	if err != nil {
 		return nil, err
 	}
-
-	return pbuf.Bytes(), nil
+	return data, nil
 }
 
 func (Marshaler) Unmarshal(data []byte, v interface{}) error {

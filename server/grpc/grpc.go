@@ -14,7 +14,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/golang/protobuf/proto"
 	"github.com/crypto-zero/go-micro/v2/broker"
 	"github.com/crypto-zero/go-micro/v2/errors"
 	"github.com/crypto-zero/go-micro/v2/logger"
@@ -25,6 +24,7 @@ import (
 	"github.com/crypto-zero/go-micro/v2/util/backoff"
 	mgrpc "github.com/crypto-zero/go-micro/v2/util/grpc"
 	mnet "github.com/crypto-zero/go-micro/v2/util/net"
+
 	"golang.org/x/net/netutil"
 
 	"google.golang.org/grpc"
@@ -34,13 +34,12 @@ import (
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/peer"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/runtime/protoiface"
 )
 
-var (
-	// DefaultMaxMsgSize define maximum message size that server can send
-	// or receive.  Default value is 4MB.
-	DefaultMaxMsgSize = 1024 * 1024 * 4
-)
+// DefaultMaxMsgSize define maximum message size that server can send
+// or receive.  Default value is 4MB.
+var DefaultMaxMsgSize = 1024 * 1024 * 4
 
 const (
 	defaultContentType = "application/grpc"
@@ -404,7 +403,7 @@ func (g *grpcServer) processRequest(stream grpc.ServerStream, service *service, 
 				if err != nil {
 					return err
 				}
-			case proto.Message:
+			case protoiface.MessageV1:
 				// user defined error that proto based we can attach it to grpc status
 				statusCode = convertCode(appErr)
 				statusDesc = appErr.Error()
@@ -476,7 +475,7 @@ func (g *grpcServer) processStream(stream grpc.ServerStream, service *service, m
 			if err != nil {
 				return err
 			}
-		case proto.Message:
+		case protoiface.MessageV1:
 			// user defined error that proto based we can attach it to grpc status
 			statusCode = convertCode(appErr)
 			statusDesc = appErr.Error()
